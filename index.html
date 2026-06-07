@@ -1,0 +1,1829 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sổ Chủ Nhiệm Điện Tử 3A</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    display:flex;
+    min-height:100vh;
+    background:#f4f6f9;
+}
+
+.sidebar{
+    width:240px;
+    background:#2563eb;
+    color:white;
+    padding:20px;
+}
+
+.sidebar h2{
+    margin-bottom:30px;
+}
+
+.sidebar ul{
+    list-style:none;
+}
+
+.sidebar li{
+    padding:12px;
+    margin-bottom:10px;
+    background:rgba(255,255,255,0.1);
+    border-radius:8px;
+}
+
+.main{
+    flex:1;
+    padding:25px;
+}
+
+.cards{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
+    margin-top:20px;
+    margin-bottom:25px;
+}
+
+.card{
+    background:white;
+    padding:20px;
+    border-radius:12px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.08);
+}
+
+.card h3{
+    color:#666;
+    margin-bottom:10px;
+}
+
+.number{
+    font-size:30px;
+    color:#2563eb;
+    font-weight:bold;
+}
+
+.toolbar{
+    display:flex;
+    gap:10px;
+    margin-bottom:15px;
+}
+
+.toolbar input{
+    flex:1;
+    padding:10px;
+    border:1px solid #ccc;
+    border-radius:6px;
+}
+
+.toolbar button{
+    background:#2563eb;
+    color:white;
+    border:none;
+    padding:10px 20px;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+table{
+    width:100%;
+    background:white;
+    border-collapse:collapse;
+}
+
+th{
+    background:#2563eb;
+    color:white;
+}
+
+th,td{
+    padding:12px;
+    border:1px solid #ddd;
+    text-align:left;
+}
+.card h2{
+    color:#2563eb;
+    margin-bottom:10px;
+}
+
+.card p{
+    margin:8px 0;
+}
+
+.card ul{
+    margin-left:20px;
+}
+
+.card li{
+    margin:6px 0;
+}
+input[type=number]{
+
+    width:55px;
+
+    text-align:center;
+
+    border:1px solid #ccc;
+
+}
+</style>
+
+</head>
+
+<body>
+<div id="dangNhap">
+
+    <h2>THÔNG TIN LỚP HỌC 3A</h2>
+
+    <input id="user" placeholder="Tên đăng nhập">
+
+    <br><br>
+
+    <input
+        id="pass"
+        type="password"
+        placeholder="Mật khẩu">
+
+    <br><br>
+
+    <button onclick="dangNhap()">
+        Đăng nhập
+    </button>
+
+</div>
+<div class="sidebar" id="khuVucWeb" style="display:none;">
+
+    <h2>🏫 Lớp 3A</h2>
+
+    <ul>
+        <li onclick="moTongQuan()">
+🏠 Tổng quan
+</li>
+        <li onclick="moDiemDanh()">
+    📋 Điểm danh
+</li>
+        <li onclick="xemLichSu()">
+📅 Lịch sử điểm danh
+</li>
+<li onclick="moNeNep()">
+⭐ Nề nếp
+</li>
+        <li onclick="xepHangHocSinh()">
+🏆 Xếp hạng
+</li>
+<li onclick="baoCaoTongHop()">
+📊 Báo cáo
+</li>
+<li onclick="moVoSachChuDep()">
+✍️ Vở sạch - Chữ đẹp
+</li>
+<li onclick="moThoiKhoaBieu()">
+📚 Thời khóa biểu
+</li>
+<li onclick="moCaiDat()">
+⚙️ Cài đặt lớp
+</li>
+    </ul>
+
+</div>
+
+<div class="main" id="mainWeb" style="display:none;">
+
+    <h1>SỔ CHỦ NHIỆM ĐIỆN TỬ 3A</h1>
+    <div id="noiDungChinh">
+
+    <div class="card">
+        <h2>🏫 Thông tin lớp học</h2>
+
+        <p><b>Lớp:</b> 3A</p>
+<p><b>Chủ nhiệm:</b> Trần Văn Duy</p>
+<p><b>Năm học:</b> 2025-2026</p>
+
+       <p><b>Chủ nhiệm lớp:</b>
+${thongTinLop.chuNhiem}
+</p>
+
+        <p><b>Năm học:</b>
+${thongTinLop.namHoc}
+</p>
+
+        <p><b>Sĩ số:</b>
+        <span id="siSoTongQuan">
+        0
+        </span> học sinh</p>
+
+    </div>
+
+    <br>
+
+    <div class="card">
+
+        <h2>📢 Thông báo</h2>
+
+        <ul>
+            <textarea
+id="thongBao"
+style="width:100%;height:100px;">
+
+Nộp quỹ lớp trước ngày 10
+Mặc đồng phục thứ Hai
+Sinh hoạt cuối tuần
+
+</textarea>
+
+<br><br>
+
+<button onclick="luuThongBao()">
+💾 Lưu thông báo
+</button>
+        </ul>
+
+    </div>
+
+    <br>
+
+    <div class="card">
+
+        <h2>📚 Hôm nay học</h2>
+
+        <div id="tkbHomNay"></div>
+
+    </div>
+
+</div>
+
+    <div class="cards">
+
+        <div class="card">
+            <h3>Tổng học sinh</h3>
+            <div class="number" id="tongHS">0</div>
+        </div>
+
+        <div class="card">
+            <h3>Nam</h3>
+            <div class="number" id="namHS">0</div>
+        </div>
+
+        <div class="card">
+            <h3>Nữ</h3>
+            <div class="number" id="nuHS">0</div>
+        </div>
+
+        <div class="card">
+            <h3>Có mặt hôm nay</h3>
+            <div class="number" id="comatHS">0</div>
+        </div>
+
+    </div>
+
+    <div class="toolbar">
+
+        <input
+            type="text"
+            id="search"
+            placeholder="Tìm kiếm học sinh..."
+            onkeyup="timKiemHocSinh()">
+
+        <button
+onclick="themHocSinh()"
+id="btnThemHS">
+    + Thêm học sinh
+</button>
+
+    </div>
+
+    <table>
+
+        <thead>
+            <tr>
+                <th>STT</th>
+                <th>Họ tên</th>
+                <th>Giới tính</th>
+                <th>Phụ huynh</th>
+                <th>SĐT</th>
+                <th>Thao tác</th>
+            </tr>
+        </thead>
+
+        <tbody id="bangHocSinh">
+
+        </tbody>
+
+    </table>
+
+</div>
+
+<script>
+    let taiKhoanHienTai =
+JSON.parse(
+localStorage.getItem("taiKhoanHienTai")
+) || null;
+function moDiemDanh(){
+
+    let html = `
+    <h2>📋 Điểm danh hôm nay</h2>
+
+    <table>
+
+        <tr>
+            <th>Học sinh</th>
+            <th>Có mặt</th>
+        </tr>
+    `;
+
+    hocSinh.forEach((hs,index)=>{
+
+        html += `
+        <tr>
+
+            <td>${hs.hoten}</td>
+
+            <td>
+
+                <input
+                type="checkbox"
+                id="dd${index}"
+                checked>
+
+            </td>
+
+        </tr>
+        `;
+    });
+
+    html += `
+    </table>
+
+    <br>
+
+    <button onclick="luuDiemDanh()">
+        LƯU ĐIỂM DANH
+    </button>
+    `;
+
+    document.getElementById(
+        "noiDungChinh"
+    ).innerHTML = html;
+
+}
+function luuDiemDanh(){
+
+    let coMat = 0;
+
+    let danhSach = [];
+
+    hocSinh.forEach((hs,index)=>{
+
+        let trangThai =
+        document.getElementById(
+            `dd${index}`
+        ).checked;
+
+        if(trangThai){
+            coMat++;
+        }
+
+        danhSach.push({
+            ten: hs.hoten,
+            coMat: trangThai
+        });
+
+    });
+
+    let homNay =
+    new Date().toLocaleDateString();
+
+    lichSuDiemDanh.push({
+
+        ngay: homNay,
+
+        coMat: coMat,
+
+        vang:
+        hocSinh.length - coMat,
+
+        danhSach: danhSach
+
+    });
+
+    localStorage.setItem(
+        "lichSuDiemDanh",
+        JSON.stringify(
+            lichSuDiemDanh
+        )
+    );
+
+    alert("Đã lưu điểm danh");
+
+}
+let hocSinh =
+JSON.parse(localStorage.getItem("hocSinh")) || [
+
+{hoten:"Nguyễn Văn An",gioitinh:"Nam",phuhuynh:"Nguyễn Văn Bình",sdt:"0900000001"},
+{hoten:"Trần Thị Mai",gioitinh:"Nữ",phuhuynh:"Trần Văn Hải",sdt:"0900000002"},
+{hoten:"Lê Quốc Bảo",gioitinh:"Nam",phuhuynh:"Lê Văn Nam",sdt:"0900000003"},
+{hoten:"Phạm Khánh Linh",gioitinh:"Nữ",phuhuynh:"Phạm Văn Hùng",sdt:"0900000004"},
+{hoten:"Hoàng Minh Đức",gioitinh:"Nam",phuhuynh:"Hoàng Văn Đức",sdt:"0900000005"},
+{hoten:"Nguyễn Thu Hà",gioitinh:"Nữ",phuhuynh:"Nguyễn Văn Hà",sdt:"0900000006"},
+{hoten:"Đặng Gia Huy",gioitinh:"Nam",phuhuynh:"Đặng Văn Sơn",sdt:"0900000007"},
+{hoten:"Trần Bảo Ngọc",gioitinh:"Nữ",phuhuynh:"Trần Văn Phong",sdt:"0900000008"},
+{hoten:"Lê Nhật Minh",gioitinh:"Nam",phuhuynh:"Lê Văn Tài",sdt:"0900000009"},
+{hoten:"Nguyễn Ngọc Anh",gioitinh:"Nữ",phuhuynh:"Nguyễn Văn Anh",sdt:"0900000010"},
+
+{hoten:"Phạm Gia Bảo",gioitinh:"Nam",phuhuynh:"Phạm Văn Long",sdt:"0900000011"},
+{hoten:"Trần Thanh Tâm",gioitinh:"Nữ",phuhuynh:"Trần Văn Tâm",sdt:"0900000012"},
+{hoten:"Nguyễn Quang Huy",gioitinh:"Nam",phuhuynh:"Nguyễn Văn Huy",sdt:"0900000013"},
+{hoten:"Lê Khánh Vy",gioitinh:"Nữ",phuhuynh:"Lê Văn Vy",sdt:"0900000014"},
+{hoten:"Phan Đức Anh",gioitinh:"Nam",phuhuynh:"Phan Văn Anh",sdt:"0900000015"},
+{hoten:"Đỗ Mai Chi",gioitinh:"Nữ",phuhuynh:"Đỗ Văn Chi",sdt:"0900000016"},
+{hoten:"Nguyễn Minh Khang",gioitinh:"Nam",phuhuynh:"Nguyễn Văn Khang",sdt:"0900000017"},
+{hoten:"Trần Hải Yến",gioitinh:"Nữ",phuhuynh:"Trần Văn Yến",sdt:"0900000018"},
+{hoten:"Lê Đức Thịnh",gioitinh:"Nam",phuhuynh:"Lê Văn Thịnh",sdt:"0900000019"},
+{hoten:"Phạm Thu Trang",gioitinh:"Nữ",phuhuynh:"Phạm Văn Trang",sdt:"0900000020"},
+
+{hoten:"Nguyễn Anh Tuấn",gioitinh:"Nam",phuhuynh:"Nguyễn Văn Tuấn",sdt:"0900000021"},
+{hoten:"Trần Ngọc Mai",gioitinh:"Nữ",phuhuynh:"Trần Văn Mai",sdt:"0900000022"},
+{hoten:"Lê Gia Hân",gioitinh:"Nữ",phuhuynh:"Lê Văn Hân",sdt:"0900000023"},
+{hoten:"Phạm Minh Quân",gioitinh:"Nam",phuhuynh:"Phạm Văn Quân",sdt:"0900000024"},
+{hoten:"Hoàng Bảo Châu",gioitinh:"Nữ",phuhuynh:"Hoàng Văn Châu",sdt:"0900000025"},
+{hoten:"Nguyễn Đức Huy",gioitinh:"Nam",phuhuynh:"Nguyễn Văn Huy",sdt:"0900000026"},
+{hoten:"Trần Khánh Linh",gioitinh:"Nữ",phuhuynh:"Trần Văn Linh",sdt:"0900000027"},
+{hoten:"Lê Quốc Đạt",gioitinh:"Nam",phuhuynh:"Lê Văn Đạt",sdt:"0900000028"},
+{hoten:"Phạm Ngọc Ánh",gioitinh:"Nữ",phuhuynh:"Phạm Văn Ánh",sdt:"0900000029"},
+{hoten:"Đặng Minh Anh",gioitinh:"Nữ",phuhuynh:"Đặng Văn Anh",sdt:"0900000030"},
+
+{hoten:"Nguyễn Thành Nam",gioitinh:"Nam",phuhuynh:"Nguyễn Văn Nam",sdt:"0900000031"},
+{hoten:"Trần Nhật Quang",gioitinh:"Nam",phuhuynh:"Trần Văn Quang",sdt:"0900000032"},
+{hoten:"Lê Bảo Trâm",gioitinh:"Nữ",phuhuynh:"Lê Văn Trâm",sdt:"0900000033"},
+{hoten:"Phạm Tuấn Kiệt",gioitinh:"Nam",phuhuynh:"Phạm Văn Kiệt",sdt:"0900000034"},
+{hoten:"Hoàng Ngọc Hà",gioitinh:"Nữ",phuhuynh:"Hoàng Văn Hà",sdt:"0900000035"},
+{hoten:"Nguyễn Gia Hưng",gioitinh:"Nam",phuhuynh:"Nguyễn Văn Hưng",sdt:"0900000036"},
+{hoten:"Trần Minh Thư",gioitinh:"Nữ",phuhuynh:"Trần Văn Thư",sdt:"0900000037"},
+{hoten:"Lê Hoàng Long",gioitinh:"Nam",phuhuynh:"Lê Văn Long",sdt:"0900000038"}
+
+];
+let taiKhoan = [
+
+{
+    user:"giaovien",
+    pass:"123456",
+    role:"teacher"
+},
+
+...hocSinh.map(hs=>({
+
+    user: hs.hoten,
+    pass:"123456",
+    role:"student"
+
+}))
+
+];
+let taiKhoanHocSinh = {};
+
+hocSinh.forEach(hs=>{
+
+    taiKhoanHocSinh[
+        hs.hoten.toLowerCase()
+    ] = "123456";
+
+});
+hocSinh.forEach(hs => {
+    if (hs.diem === undefined) {
+        hs.diem = 10;
+    }
+});
+hocSinh.forEach(hs=>{
+
+    if(hs.nhanXet === undefined){
+        hs.nhanXet = "";
+    }
+
+    if(hs.xepLoai === undefined){
+        hs.xepLoai = "Hoàn thành";
+    }
+
+});
+hocSinh.forEach(hs=>{
+
+    if(!hs.voSach){
+
+        hs.voSach = {
+
+            thang89:"",
+            thang10:"",
+            thang11:"",
+            thang12:"",
+
+            hki:"",
+
+            thang12_hk2:"",
+            thang3:"",
+            thang4:"",
+            thang5:"",
+
+            canam:""
+
+        };
+
+    }
+
+});
+let thongTinLop =
+JSON.parse(
+localStorage.getItem("thongTinLop")
+) || {
+
+    tenLop:"3A",
+
+    chuNhiem:"Trần Văn Duy",
+
+    namHoc:"2025-2026"
+
+};
+let lichSuDiemDanh =
+JSON.parse(
+localStorage.getItem("lichSuDiemDanh")
+) || [];
+let userRole = "";
+
+if(taiKhoanHienTai){
+
+    userRole = taiKhoanHienTai.role;
+
+}
+if(taiKhoanHienTai){
+    document.getElementById("khuVucWeb").style.display = "block";
+    document.getElementById("mainWeb").style.display = "block";
+    document.getElementById("dangNhap").style.display = "none";
+}
+let thoiKhoaBieu =
+JSON.parse(
+localStorage.getItem("thoiKhoaBieu")
+) || [
+
+{
+    thu:"Thứ 2",
+    sang:["Toán","Tiếng Việt","TNXH"],
+    chieu:["Tin học","Mỹ thuật","Âm nhạc"]
+},
+
+{
+    thu:"Thứ 3",
+    sang:["Tiếng Việt","Toán","Đạo đức"],
+    chieu:["Tiếng Anh","Thể dục","Hoạt động"]
+},
+
+{
+    thu:"Thứ 4",
+    sang:["Toán","Tiếng Việt","TNXH"],
+    chieu:["Tin học","Mỹ thuật","Âm nhạc"]
+},
+
+{
+    thu:"Thứ 5",
+    sang:["Tiếng Việt","Toán","Tiếng Anh"],
+    chieu:["Thể dục","Đạo đức","Hoạt động"]
+},
+
+{
+    thu:"Thứ 6",
+    sang:["Toán","Tiếng Việt","Sinh hoạt"],
+    chieu:["Ôn tập","Trò chơi","Tổng kết"]
+}
+
+];
+function luuDuLieu(){
+
+    localStorage.setItem(
+        "hocSinh",
+        JSON.stringify(hocSinh)
+    );
+
+}
+function capNhatVoSach(index,cot,giaTri){
+
+    hocSinh[index].voSach[cot] = giaTri;
+
+    luuDuLieu();
+
+}
+
+function hienThi(ds){
+
+    let html="";
+
+    ds.forEach((hs)=>{
+
+        let viTri = hocSinh.indexOf(hs);
+
+        html += `
+        <tr>
+            <td>${viTri+1}</td>
+            <td>${hs.hoten}</td>
+            <td>${hs.gioitinh}</td>
+            <td>${hs.phuhuynh}</td>
+            <td>
+    <input
+        type="text"
+        value="${hs.sdt}"
+        onchange="capNhatSDT(${viTri}, this.value)"
+        style="
+            width:120px;
+            padding:4px;
+            border:1px solid #ccc;
+            border-radius:4px;
+        ">
+</td>
+            <td>
+
+${
+vaiTro==="giaovien"
+?
+
+`
+<button onclick="suaHocSinh(${index})">
+Sửa
+</button>
+
+<button onclick="xoaHocSinh(${index})">
+Xóa
+</button>
+`
+
+:
+
+"Chỉ xem"
+
+}
+
+</td>
+        </tr>
+        `;
+    });
+
+    document.getElementById("bangHocSinh").innerHTML = html;
+if(userRole !== "teacher"){
+
+    document.getElementById(
+        "btnThemHS"
+    ).style.display = "none";
+
+}
+    capNhatThongKe();
+}
+
+function capNhatThongKe(){
+
+    document.getElementById(
+        "tongHS"
+    ).innerText = hocSinh.length;
+
+    let nam =
+    hocSinh.filter(
+        x => x.gioitinh==="Nam"
+    ).length;
+
+    let nu =
+    hocSinh.filter(
+        x => x.gioitinh==="Nữ"
+    ).length;
+
+    document.getElementById(
+        "namHS"
+    ).innerText = nam;
+
+    document.getElementById(
+        "nuHS"
+    ).innerText = nu;
+
+    document.getElementById(
+        "comatHS"
+    ).innerText = hocSinh.length;
+
+}
+function suaHocSinh(index){
+    if(userRole !== "teacher"){
+    return;
+}
+
+    let ten = prompt(
+        "Họ tên",
+        hocSinh[index].hoten
+    );
+
+    if(ten===null) return;
+
+    let gioitinh = prompt(
+        "Giới tính",
+        hocSinh[index].gioitinh
+    );
+
+    let phuhuynh = prompt(
+        "Phụ huynh",
+        hocSinh[index].phuhuynh
+    );
+
+    let sdt = prompt(
+        "SĐT",
+        hocSinh[index].sdt
+    );
+
+    hocSinh[index].hoten = ten;
+    hocSinh[index].gioitinh = gioitinh;
+    hocSinh[index].phuhuynh = phuhuynh;
+    hocSinh[index].sdt = sdt;
+
+    luuDuLieu();
+
+    hienThi(hocSinh);
+}
+function capNhatSDT(index,sdt){
+
+    hocSinh[index].sdt = sdt;
+
+    luuDuLieu();
+
+}
+function xoaHocSinh(index){
+
+    if(userRole !== "teacher"){
+        return;
+    }
+
+    let xacNhan =
+    confirm("Bạn có chắc muốn xóa?");
+
+    if(!xacNhan) return;
+
+    hocSinh.splice(index,1);
+
+    luuDuLieu();
+
+    hienThi(hocSinh);
+
+}
+function themHocSinh(){
+    if(userRole !== "teacher"){
+    return;
+}
+
+    let ten =
+    prompt("Nhập họ tên học sinh");
+
+    if(!ten) return;
+
+    let gioitinh =
+    prompt("Giới tính (Nam hoặc Nữ)");
+
+    let phuhuynh =
+    prompt("Tên phụ huynh");
+
+    let sdt =
+    prompt("Số điện thoại");
+
+    hocSinh.push({
+
+        hoten:ten,
+        gioitinh:gioitinh,
+        phuhuynh:phuhuynh,
+        sdt:sdt
+
+    });
+
+    luuDuLieu();
+
+    hienThi(hocSinh);
+
+}
+
+function timKiemHocSinh(){
+
+    let tukhoa =
+    document.getElementById("search")
+    .value
+    .toLowerCase();
+
+    let ketqua =
+    hocSinh.filter(hs =>
+        hs.hoten
+        .toLowerCase()
+        .includes(tukhoa)
+    );
+
+    hienThi(ketqua);
+
+}
+function xemLichSu(){
+
+    let html = `
+    <h2>📅 Lịch sử điểm danh</h2>
+
+    <table>
+
+    <tr>
+        <th>Ngày</th>
+        <th>Có mặt</th>
+        <th>Vắng</th>
+    </tr>
+    `;
+
+    lichSuDiemDanh.forEach(ls=>{
+
+        html += `
+        <tr>
+            <td>${ls.ngay}</td>
+            <td>${ls.coMat}</td>
+            <td>${ls.vang}</td>
+        </tr>
+        `;
+
+    });
+
+    html += `</table>`;
+
+    document.getElementById(
+        "noiDungChinh"
+    ).innerHTML = html;
+
+}
+function congDiem(index){
+    
+    if(userRole !== "teacher"){
+        return;
+    }
+
+    hocSinh[index].diem++;
+
+    luuDuLieu();
+
+    moNeNep();
+
+}
+
+function truDiem(index){
+    if(userRole !== "teacher"){
+        return;
+    }
+
+
+    hocSinh[index].diem--;
+
+    luuDuLieu();
+
+    moNeNep();
+
+}
+function moNeNep(){
+    let html = `
+    <h2>⭐ Quản lý nề nếp</h2>
+
+    <table>
+
+    <tr>
+        <th>Học sinh</th>
+        <th>Điểm</th>
+        <th>Thưởng</th>
+        <th>Trừ</th>
+    </tr>
+    `;
+
+    hocSinh.forEach((hs,index)=>{
+
+        html += `
+        <tr>
+
+            <td>${hs.hoten}</td>
+
+            <td>${hs.diem}</td>
+
+            <td>
+
+${
+userRole==="teacher"
+?
+
+`
+<button onclick="congDiem(${index})">
++1
+</button>
+`
+
+:
+
+"🔒"
+
+}
+
+</td>
+
+<td>
+
+${
+userRole==="teacher"
+?
+
+`
+<button onclick="truDiem(${index})">
+-1
+</button>
+`
+
+:
+
+"🔒"
+
+}
+
+</td>
+
+        </tr>
+        `;
+    });
+
+    html += `</table>`;
+
+    document.getElementById(
+        "noiDungChinh"
+    ).innerHTML = html;
+
+}
+function xepHangHocSinh(){
+
+    let dsXepHang = [...hocSinh];
+
+    dsXepHang.sort((a,b)=>
+        b.diem - a.diem
+    );
+
+    let html = `
+    <h2>🏆 Bảng xếp hạng nề nếp</h2>
+
+    <table>
+
+        <tr>
+            <th>Hạng</th>
+            <th>Học sinh</th>
+            <th>Điểm</th>
+        </tr>
+    `;
+
+    dsXepHang.forEach((hs,index)=>{
+
+        html += `
+        <tr>
+
+            <td>${index+1}</td>
+
+            <td>${hs.hoten}</td>
+
+            <td>${hs.diem}</td>
+
+        </tr>
+        `;
+
+    });
+
+    html += `</table>`;
+
+    document.getElementById(
+        "noiDungChinh"
+    ).innerHTML = html;
+
+}
+function moNhanXet(){
+
+    let html = `
+    <h2>📝 Nhận xét học sinh</h2>
+
+    <table>
+
+        <tr>
+            <th>Học sinh</th>
+            <th>Xếp loại</th>
+            <th>Nhận xét</th>
+            <th>Thao tác</th>
+        </tr>
+    `;
+
+    hocSinh.forEach((hs,index)=>{
+
+        html += `
+        <tr>
+
+            <td>${hs.hoten}</td>
+
+            <td>${hs.xepLoai}</td>
+
+            <td>${hs.nhanXet}</td>
+
+            <td>
+
+                <button onclick="suaNhanXet(${index})">
+                    Cập nhật
+                </button>
+
+            </td>
+
+        </tr>
+        `;
+    });
+
+    html += `</table>`;
+
+    document.getElementById(
+        "noiDungChinh"
+    ).innerHTML = html;
+
+}
+function suaNhanXet(index){
+    if(userRole !== "teacher"){
+        return;
+    }
+
+    let xepLoai = prompt(
+        "Xếp loại",
+        hocSinh[index].xepLoai
+    );
+
+    if(xepLoai === null) return;
+
+    let nhanXet = prompt(
+        "Nhận xét",
+        hocSinh[index].nhanXet
+    );
+
+    if(nhanXet === null) return;
+
+    hocSinh[index].xepLoai = xepLoai;
+    hocSinh[index].nhanXet = nhanXet;
+
+    luuDuLieu();
+
+    moNhanXet();
+
+}
+function baoCaoTongHop(){
+
+    let tongHS = hocSinh.length;
+
+    let nam = hocSinh.filter(
+        hs => hs.gioitinh === "Nam"
+    ).length;
+
+    let nu = hocSinh.filter(
+        hs => hs.gioitinh === "Nữ"
+    ).length;
+
+    let diemTB = 0;
+
+    hocSinh.forEach(hs=>{
+
+        diemTB += hs.diem || 0;
+
+    });
+
+    diemTB =
+    (diemTB / tongHS).toFixed(1);
+
+    let top5 = [...hocSinh];
+
+    top5.sort(
+        (a,b)=>b.diem-a.diem
+    );
+
+    top5 = top5.slice(0,5);
+
+    let html = `
+    <h2>📊 Báo cáo tổng hợp lớp 3A</h2>
+
+    <div class="cards">
+
+        <div class="card">
+            <h3>Tổng học sinh</h3>
+            <div class="number">${tongHS}</div>
+        </div>
+
+        <div class="card">
+            <h3>Nam</h3>
+            <div class="number">${nam}</div>
+        </div>
+
+        <div class="card">
+            <h3>Nữ</h3>
+            <div class="number">${nu}</div>
+        </div>
+
+        <div class="card">
+            <h3>Điểm TB</h3>
+            <div class="number">${diemTB}</div>
+        </div>
+
+    </div>
+
+    <h3>🏆 Top 5 học sinh nề nếp</h3>
+
+<p>
+Tổng số buổi điểm danh:
+<b>${lichSuDiemDanh.length}</b>
+</p>
+
+    <table>
+
+        <tr>
+            <th>Hạng</th>
+            <th>Họ tên</th>
+            <th>Điểm</th>
+        </tr>
+    `;
+
+    top5.forEach((hs,index)=>{
+
+        html += `
+        <tr>
+            <td>${index+1}</td>
+            <td>${hs.hoten}</td>
+            <td>${hs.diem}</td>
+        </tr>
+        `;
+
+    });
+
+    html += `</table>`;
+
+    document.getElementById(
+        "noiDungChinh"
+    ).innerHTML = html;
+
+}
+function moThoiKhoaBieu(){
+
+    let html = `
+    <h2>📚 Thời khóa biểu lớp 3A</h2>
+
+    <button onclick="suaTKB()">
+        ✏️ Sửa thời khóa biểu
+    </button>
+
+    <br><br>
+
+    <table>
+
+    <tr>
+        <th>Thứ</th>
+
+        <th>Sáng 1</th>
+        <th>Sáng 2</th>
+        <th>Sáng 3</th>
+
+        <th>Chiều 1</th>
+        <th>Chiều 2</th>
+        <th>Chiều 3</th>
+    </tr>
+    `;
+
+    thoiKhoaBieu.forEach(ngay=>{
+
+        html += `
+        <tr>
+
+            <td>${ngay.thu}</td>
+
+            <td>${ngay.sang[0]}</td>
+            <td>${ngay.sang[1]}</td>
+            <td>${ngay.sang[2]}</td>
+
+            <td>${ngay.chieu[0]}</td>
+            <td>${ngay.chieu[1]}</td>
+            <td>${ngay.chieu[2]}</td>
+
+        </tr>
+        `;
+
+    });
+
+    html += "</table>";
+
+    document.getElementById(
+        "noiDungChinh"
+    ).innerHTML = html;
+
+}
+function suaTKB(){
+
+    let thu =
+    prompt(
+        "Sửa ngày nào? (0=Thứ 2, 1=Thứ 3, 2=Thứ 4, 3=Thứ 5, 4=Thứ 6)"
+    );
+
+    if(thu===null) return;
+
+    thu = parseInt(thu);
+
+    if(
+        thu < 0 ||
+        thu > 4
+    ){
+        alert("Sai thứ");
+        return;
+    }
+
+    let sang1 =
+    prompt(
+        "Tiết sáng 1",
+        thoiKhoaBieu[thu].sang[0]
+    );
+
+    let sang2 =
+    prompt(
+        "Tiết sáng 2",
+        thoiKhoaBieu[thu].sang[1]
+    );
+
+    let sang3 =
+    prompt(
+        "Tiết sáng 3",
+        thoiKhoaBieu[thu].sang[2]
+    );
+
+    let chieu1 =
+    prompt(
+        "Tiết chiều 1",
+        thoiKhoaBieu[thu].chieu[0]
+    );
+
+    let chieu2 =
+    prompt(
+        "Tiết chiều 2",
+        thoiKhoaBieu[thu].chieu[1]
+    );
+
+    let chieu3 =
+    prompt(
+        "Tiết chiều 3",
+        thoiKhoaBieu[thu].chieu[2]
+    );
+
+    thoiKhoaBieu[thu].sang = [
+        sang1,
+        sang2,
+        sang3
+    ];
+
+    thoiKhoaBieu[thu].chieu = [
+        chieu1,
+        chieu2,
+        chieu3
+    ];
+
+    localStorage.setItem(
+        "thoiKhoaBieu",
+        JSON.stringify(
+            thoiKhoaBieu
+        )
+    );
+
+    alert("Đã lưu");
+
+    moThoiKhoaBieu();
+
+}
+function moTongQuan(){
+
+    let thu =
+    new Date().getDay();
+
+    let thuHoc =
+    thu - 1;
+
+    let tkb = "";
+
+    if(
+    thuHoc >= 0 &&
+    thuHoc <= 4
+){
+
+    let ngay =
+    thoiKhoaBieu[thuHoc];
+
+    tkb += "<b>Buổi sáng</b>";
+
+    ngay.sang.forEach((mon,index)=>{
+
+        tkb += `
+        <p>
+        Tiết ${index+1}: ${mon}
+        </p>
+        `;
+
+    });
+
+    tkb += "<br><b>Buổi chiều</b>";
+
+    ngay.chieu.forEach((mon,index)=>{
+
+        tkb += `
+        <p>
+        Tiết ${index+1}: ${mon}
+        </p>
+        `;
+
+    });
+
+}
+
+    document.getElementById(
+        "noiDungChinh"
+    ).innerHTML = `
+
+    <div class="card">
+
+        <h2>🏫 Thông tin lớp học</h2>
+
+        <p><b>Lớp:</b> 3A</p>
+
+        <p><b>Chủ nhiệm lớp:</b>
+        Trần Văn Duy</p>
+
+        <p><b>Năm học:</b>
+        2025 - 2026</p>
+
+        <p><b>Sĩ số:</b>
+        ${hocSinh.length}
+        học sinh</p>
+
+    </div>
+
+    <br>
+
+    <div class="card">
+
+        <h2>📢 Thông báo</h2>
+
+        <textarea
+id="thongBao"
+style="
+width:100%;
+height:120px;
+">
+
+${localStorage.getItem("thongBao") || ""}
+
+</textarea>
+
+<br><br>
+
+<button onclick="luuThongBao()">
+💾 Lưu thông báo
+</button>
+
+    </div>
+
+    <br>
+
+    <div class="card">
+
+        <h2>📚 Hôm nay học</h2>
+
+        <textarea
+id="homNayHoc"
+style="
+width:100%;
+height:100px;
+">
+
+${localStorage.getItem("homNayHoc") || tkb}
+
+</textarea>
+
+<br><br>
+
+<button onclick="luuHomNayHoc()">
+💾 Lưu môn học
+</button>
+
+    </div>
+
+    `;
+}
+function moCaiDat(){
+
+    let html = `
+
+    <h2>⚙️ Cài đặt lớp</h2>
+
+    <table>
+
+        <tr>
+            <td>Tên lớp</td>
+
+            <td>
+                <input
+                id="tenLop"
+                value="${thongTinLop.tenLop}">
+            </td>
+        </tr>
+
+        <tr>
+            <td>Chủ nhiệm</td>
+
+            <td>
+                <input
+                id="chuNhiem"
+                value="${thongTinLop.chuNhiem}">
+            </td>
+        </tr>
+
+        <tr>
+            <td>Năm học</td>
+
+            <td>
+                <input
+                id="namHoc"
+                value="${thongTinLop.namHoc}">
+            </td>
+        </tr>
+
+    </table>
+
+    <br>
+
+    <button onclick="luuCaiDat()">
+        💾 Lưu
+    </button>
+
+    `;
+
+    document.getElementById(
+        "noiDungChinh"
+    ).innerHTML = html;
+
+}
+function luuCaiDat(){
+
+    thongTinLop.tenLop =
+    document.getElementById(
+        "tenLop"
+    ).value;
+
+    thongTinLop.chuNhiem =
+    document.getElementById(
+        "chuNhiem"
+    ).value;
+
+    thongTinLop.namHoc =
+    document.getElementById(
+        "namHoc"
+    ).value;
+
+    localStorage.setItem(
+
+        "thongTinLop",
+
+        JSON.stringify(
+            thongTinLop
+        )
+
+    );
+
+    alert(
+        "Đã lưu thành công"
+    );
+
+}
+function luuThongBao(){
+
+    let noiDung =
+
+    document.getElementById(
+        "thongBao"
+    ).value;
+
+    localStorage.setItem(
+        "thongBao",
+        noiDung
+    );
+
+    alert(
+        "Đã lưu thông báo"
+    );
+
+}
+function luuHomNayHoc(){
+
+    let noiDung =
+
+    document.getElementById(
+        "homNayHoc"
+    ).value;
+
+    localStorage.setItem(
+        "homNayHoc",
+        noiDung
+    );
+
+    alert(
+        "Đã lưu"
+    );
+
+}
+function taoOdiem(index,cot,giaTri){
+
+    if(userRole !== "teacher"){
+
+        return giaTri || "";
+
+    }
+
+    return `
+    <input
+        type="number"
+        min="0"
+        max="10"
+        step="0.1"
+        value="${giaTri}"
+
+        onchange="
+            capNhatVoSach(
+                ${index},
+                '${cot}',
+                this.value
+            )
+        "
+
+        style="
+            width:55px;
+            text-align:center;
+        "
+    >
+    `;
+
+}
+function tinhXepHangVoSach(cot){
+
+    let ds = hocSinh.map((hs,index)=>({
+
+        index:index,
+
+        diem:Number(
+            hs.voSach[cot] || 0
+        )
+
+    }));
+
+    ds.sort((a,b)=>
+        b.diem-a.diem
+    );
+
+    let hang = {};
+
+    ds.forEach((item,i)=>{
+
+        hang[item.index] = i+1;
+
+    });
+
+    return hang;
+
+}
+function moVoSachChuDep(){
+
+let h89=tinhXepHangVoSach("thang89");
+let h10=tinhXepHangVoSach("thang10");
+let h11=tinhXepHangVoSach("thang11");
+let h12=tinhXepHangVoSach("thang12");
+
+let hhki=tinhXepHangVoSach("hki");
+
+let h12hk2=tinhXepHangVoSach("thang12_hk2");
+let h3=tinhXepHangVoSach("thang3");
+let h4=tinhXepHangVoSach("thang4");
+let h5=tinhXepHangVoSach("thang5");
+
+let hcn=tinhXepHangVoSach("canam");
+
+let html=`
+
+<h2>
+✍️ KẾT QUẢ VỞ SẠCH - CHỮ ĐẸP
+</h2>
+
+<table>
+
+<tr>
+
+<th rowspan="2">TT</th>
+
+<th rowspan="2">
+Họ và tên học sinh
+</th>
+
+<th colspan="4">
+Xếp loại theo tháng
+</th>
+
+<th rowspan="2">
+HKI
+</th>
+
+<th colspan="4">
+Xếp loại theo tháng
+</th>
+
+<th rowspan="2">
+Cả năm
+</th>
+
+</tr>
+
+<tr>
+
+<th>8+9</th>
+<th>10</th>
+<th>11</th>
+<th>12</th>
+
+<th>1+2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+
+</tr>
+
+`;
+
+hocSinh.forEach((hs,index)=>{
+
+html+=`
+
+<tr>
+
+<td rowspan="2">
+${index+1}
+</td>
+
+<td rowspan="2">
+${hs.hoten}
+</td>
+
+<td>
+${taoOdiem(index,"thang89",hs.voSach.thang89)}
+</td>
+
+<td>
+${taoOdiem(index,"thang10",hs.voSach.thang10)}
+</td>
+
+<td>
+${taoOdiem(index,"thang11",hs.voSach.thang11)}
+</td>
+
+<td>
+${taoOdiem(index,"thang12",hs.voSach.thang12)}
+</td>
+
+<td>
+${taoOdiem(index,"hki",hs.voSach.hki)}
+</td>
+
+<td>
+${taoOdiem(index,"thang12_hk2",hs.voSach.thang12_hk2)}
+</td>
+
+<td>
+${taoOdiem(index,"thang3",hs.voSach.thang3)}
+</td>
+
+<td>
+${taoOdiem(index,"thang4",hs.voSach.thang4)}
+</td>
+
+<td>
+${taoOdiem(index,"thang5",hs.voSach.thang5)}
+</td>
+
+<td>
+${taoOdiem(index,"canam",hs.voSach.canam)}
+</td>
+
+</tr>
+
+<tr>
+
+<td>${h89[index]}</td>
+<td>${h10[index]}</td>
+<td>${h11[index]}</td>
+<td>${h12[index]}</td>
+
+<td>${hhki[index]}</td>
+
+<td>${h12hk2[index]}</td>
+<td>${h3[index]}</td>
+<td>${h4[index]}</td>
+<td>${h5[index]}</td>
+
+<td>${hcn[index]}</td>
+
+</tr>
+
+`;
+
+});
+
+html+=`</table>`;
+
+document.getElementById(
+"noiDungChinh"
+).innerHTML=html;
+
+}
+let vaiTro = "";
+function dangNhap(){
+
+    let user =
+    document.getElementById("user").value;
+
+    let pass =
+    document.getElementById("pass").value;
+
+    let tk =
+    taiKhoan.find(t=>
+
+        t.user === user &&
+        t.pass === pass
+
+    );
+
+    if(!tk){
+
+        alert("Sai tài khoản");
+        return;
+
+    }
+
+    localStorage.setItem(
+        "taiKhoanHienTai",
+        JSON.stringify(tk)
+    );
+
+    location.reload();
+
+}
+if(!taiKhoanHienTai){
+
+document.body.innerHTML = `
+
+<div style="
+max-width:400px;
+margin:100px auto;
+background:white;
+padding:20px;
+border-radius:10px;
+">
+
+<h2>Thông tin lớp học 3A</h2>
+
+<input
+id="user"
+placeholder="Tên đăng nhập"
+style="width:100%;padding:10px">
+
+<br><br>
+
+<input
+id="pass"
+type="password"
+placeholder="Mật khẩu"
+style="width:100%;padding:10px">
+
+<br><br>
+
+<button onclick="dangNhap()">
+Đăng nhập
+</button>
+
+</div>
+
+`;
+
+throw new Error("login");
+
+}
+hienThi(hocSinh);
+
+moTongQuan();
+
+</script>
+
+</body>
+</html>
